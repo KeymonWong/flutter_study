@@ -11,8 +11,8 @@ class Login extends StatelessWidget {
       ),
       body: Padding(
         padding: new EdgeInsets.all(20),
-        child: Center(
-          child: Column(
+        child: new Center(
+          child: new Column(
             children: <Widget>[
               Text('这是登录页面'),
             ],
