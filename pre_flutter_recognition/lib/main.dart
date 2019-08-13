@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'login.dart';
 
 Route<dynamic> _onRouter(RouteSettings settings) {
-  if (settings.name == '/FirstPage') {
+  String routeName = settings.name;
+  if (routeName == '/login') {
     return MaterialPageRoute(
       settings: settings,
-      builder: (context) {
-        String routeName = settings.name;
+      builder: (BuildContext context) {
         //如果访问的路由页面需要登录，但当前未登录，则直接返回登录页路由
         //引导用户登录；其他情况则正常打开路由
-        // Navigator.of(context).pushNamed(routeName);
+        return Login();
       },
     );
   }
@@ -38,13 +39,15 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
-      
-      initialRoute: "/", //名为 "/" 的路由作为 App 的初始路由页面，即首页
+
+      initialRoute: '/', //名为 "/" 的路由作为 App 的初始路由页面，即首页
       //注册路由表
       routes: {
-        '/': (BuildContext ctx) => MyHomePage(title: 'Flutter Demo Home Page'), //注册首页路由
+        '/': (BuildContext ctx) =>
+            MyHomePage(title: 'Flutter Demo Home Page'), //注册首页路由
         '/FirstPage': (BuildContext ctx) => FirstPage(),
-        '/SecondPage': (BuildContext ctx) => SecondPage(text: ModalRoute.of(context).settings.arguments),
+        '/SecondPage': (BuildContext ctx) =>
+            SecondPage(text: ModalRoute.of(context).settings.arguments),
       },
       //注意onGenerateRoute只会对命名路由生效
       //它在打开命名路由时可能会被调用，之所以说可能，是因为当调用Navigator.pushNamed(...)打开命名路由时，
@@ -131,19 +134,24 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.display1,
             ),
             FlatButton(
-              child: Text("打开新路由页面"),
+              child: Text("打开FirstPage页面"),
               textColor: Colors.green,
               onPressed: () {
                 Navigator.pushNamed(context, '/FirstPage');
                 // Navigator.push(
                 //   context,
-                //   MaterialPageRoute( 
+                //   MaterialPageRoute(
                 //     builder: (context) {
                 //       return FirstPage();
                 //     },
                 //   ),
                 // );
               },
+            ),
+            FlatButton(
+              child: Text("打开登录页面"),
+              textColor: Colors.red,
+              onPressed: () => Navigator.pushNamed(context, '/login'),
             ),
           ],
         ),
@@ -160,13 +168,11 @@ class _MyHomePageState extends State<MyHomePage> {
 class SecondPage extends StatelessWidget {
   SecondPage({
     Key key,
-
-    @required 
-    this.text, // 接收一个 text 参数
+    @required this.text, // 接收一个 text 参数
   }) : super(key: key);
 
   final String text;
-  
+
   @override
   Widget build(BuildContext context) {
     print("push传过来的值为(当前SecondPage)：$text");
@@ -195,7 +201,6 @@ class SecondPage extends StatelessWidget {
 }
 
 class FirstPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,7 +218,8 @@ class FirstPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     //第一个页面向第二个页面传值，类似 iOS push、pop 的传值
-                    builder: (context) => SecondPage(text: "FirstPage->SecondPage push传过来的值"),
+                    builder: (context) =>
+                        SecondPage(text: "FirstPage->SecondPage push传过来的值"),
                   ),
                 );
 
