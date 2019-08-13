@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 
+
+Route<dynamic> _onRouter(RouteSettings settings) {
+  if (settings.name == '/FirstPage') {
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        String routeName = settings.name;
+        //如果访问的路由页面需要登录，但当前未登录，则直接返回登录页路由
+        //引导用户登录；其他情况则正常打开路由
+        // Navigator.of(context).pushNamed(routeName);
+      },
+    );
+  }
+  //The other paths we support are in the routes table. 其他的路由使用注册的路由表里的
+  return null;
+}
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -20,7 +37,22 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      
+      initialRoute: "/", //名为 "/" 的路由作为 App 的初始路由页面，即首页
+      //注册路由表
+      routes: {
+        '/': (BuildContext ctx) => MyHomePage(title: 'Flutter Demo Home Page'), //注册首页路由
+        '/FirstPage': (BuildContext ctx) => FirstPage(),
+        '/SecondPage': (BuildContext ctx) => SecondPage(text: ModalRoute.of(context).settings.arguments),
+      },
+      //注意onGenerateRoute只会对命名路由生效
+      //它在打开命名路由时可能会被调用，之所以说可能，是因为当调用Navigator.pushNamed(...)打开命名路由时，
+      //如果指定的路由名在路由表中已注册，则会调用路由表中的builder函数来生成路由组件；
+      //如果路由表中没有注册，才会调用onGenerateRoute来生成路由。
+      //可以通过onGenerateRoute做一些全局的路由跳转前置处理逻辑。
+      //建议读者最好统一使用命名路由的管理方式
+      onGenerateRoute: _onRouter,
     );
   }
 }
@@ -98,6 +130,21 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+            FlatButton(
+              child: Text("打开新路由页面"),
+              textColor: Colors.green,
+              onPressed: () {
+                Navigator.pushNamed(context, '/FirstPage');
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute( 
+                //     builder: (context) {
+                //       return FirstPage();
+                //     },
+                //   ),
+                // );
+              },
+            ),
           ],
         ),
       ),
@@ -106,6 +153,78 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  SecondPage({
+    Key key,
+
+    @required 
+    this.text, // 接收一个 text 参数
+  }) : super(key: key);
+
+  final String text;
+  
+  @override
+  Widget build(BuildContext context) {
+    print("push传过来的值为(当前SecondPage)：$text");
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("SecondPage"),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(18),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Text(text),
+              RaisedButton(
+                //pop 时返回的值
+                onPressed: () => Navigator.pop(context, "pop 返回值"),
+                child: Text("返回"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FirstPage extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("FirstPage"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              onPressed: () async {
+                //打开 SecondPage ，并异步等待返回结果
+                var res = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    //第一个页面向第二个页面传值，类似 iOS push、pop 的传值
+                    builder: (context) => SecondPage(text: "FirstPage->SecondPage push传过来的值"),
+                  ),
+                );
+
+                //pop时 获取返回的值
+                print("pop返回的值为(当前FirstPage)：$res");
+              },
+              child: Text("打开提示页面"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
