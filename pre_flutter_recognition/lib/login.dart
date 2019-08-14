@@ -30,6 +30,7 @@ class RandomWordsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wordPair = new WordPair.random();
+    debugPrint('$wordPair');
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: new Text('随机字符：' + wordPair.toString()),
