@@ -3,6 +3,7 @@ import 'package:flutter/material.dart'; //安卓默认视觉效果
 
 import 'login.dart';
 import 'WidgetBreif.dart';
+import 'WidgetStateManager.dart';
 
 Route<dynamic> _onRouter(RouteSettings settings) {
   String routeName = settings.name;
@@ -51,6 +52,8 @@ class MyApp extends StatelessWidget {
         '/SecondPage': (BuildContext ctx) =>
             SecondPage(text: ModalRoute.of(context).settings.arguments),
         '/WidgetBreif': (context) => WidgetBreif(),
+        '/WidgetStateManager': (context) => WidgetStateManager(),
+
       },
       //注意onGenerateRoute只会对命名路由生效
       //它在打开命名路由时可能会被调用，之所以说可能，是因为当调用Navigator.pushNamed(...)打开命名路由时，
@@ -162,6 +165,12 @@ class _MyHomePageState extends State<MyHomePage> {
               textColor: Colors.blue,
               onPressed: () => Navigator.pushNamed(context, '/WidgetBreif'),
             ),
+            FlatButton(
+              child: Text('widget状态管理'),
+              textColor: Colors.yellow[900],
+              hoverColor: Colors.yellow[800],
+              onPressed: () => Navigator.pushNamed(context, '/WidgetStateManager'),
+            )
           ],
         ),
       ),
