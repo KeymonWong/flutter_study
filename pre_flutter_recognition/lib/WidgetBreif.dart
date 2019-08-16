@@ -77,6 +77,33 @@ class _CounterStatefulWidgetState extends State<CounterStatefulWidget> {
     print('initState');
   }
 
+  ///当State对象的依赖发生变化时会被调用；
+  ///例如：在之前build()中包含了一个InheritedWidget，然后在之后的build()中InheritedWidget发生了变化，
+  ///那么此时InheritedWidget的子widget的didChangeDependencies()回调都会被调用。
+  ///典型的场景是当系统语言Locale或应用主题改变时，Flutter framework会通知widget调用此回调。
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('didChangeDependencies');
+  }
+    
+  ///专门为了开发调试而提供的，在热重载(hot reload)时会被调用，此回调在Release模式下永远不会被调用。
+  @override
+  void reassemble() {
+    super.reassemble();
+    print('reassemble');
+  }
+
+  ///在widget重新构建时，Flutter framework会调用Widget.canUpdate来检测Widget树中同一位置的新旧节点，
+  ///然后决定是否需要更新，如果Widget.canUpdate返回true则会调用此回调。正如之前所述，
+  ///Widget.canUpdate会在新旧widget的key和runtimeType同时相等时会返回true，
+  ///也就是说在在新旧widget的key和runtimeType同时相等时didUpdateWidget()就会被调用。
+  @override
+  void didUpdateWidget(CounterStatefulWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('didUpdateWidget');
+  }
+
   ///主要是用于构建Widget子树的，会在如下场景被调用：
   ///1.在调用initState()之后。
   ///2.在调用didUpdateWidget()之后。
@@ -89,7 +116,7 @@ class _CounterStatefulWidgetState extends State<CounterStatefulWidget> {
     return Center(
       child: Row(
         children: <Widget>[
-          Text('有状态 widget 按钮点击计数器：'),
+          Text('有状态widget 按钮点击计数器：'),
           FlatButton(
             child: Text('$_counter'),
             textColor: Colors.green.shade800,
@@ -99,16 +126,6 @@ class _CounterStatefulWidgetState extends State<CounterStatefulWidget> {
         ],
       ),
     );
-  }
-
-  ///在widget重新构建时，Flutter framework会调用Widget.canUpdate来检测Widget树中同一位置的新旧节点，
-  ///然后决定是否需要更新，如果Widget.canUpdate返回true则会调用此回调。正如之前所述，
-  ///Widget.canUpdate会在新旧widget的key和runtimeType同时相等时会返回true，
-  ///也就是说在在新旧widget的key和runtimeType同时相等时didUpdateWidget()就会被调用。
-  @override
-  void didUpdateWidget(CounterStatefulWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print('didUpdateWidget');
   }
 
   ///当State对象从树中被移除时，会调用此回调。如果移除后没有重新插入到树中则紧接着会调用dispose()方法。
@@ -123,22 +140,5 @@ class _CounterStatefulWidgetState extends State<CounterStatefulWidget> {
   void dispose() {
     super.dispose();
     print('dispose');
-  }
-  
-  ///专门为了开发调试而提供的，在热重载(hot reload)时会被调用，此回调在Release模式下永远不会被调用。
-  @override
-  void reassemble() {
-    super.reassemble();
-    print('reassemble');
-  }
-
-  ///当State对象的依赖发生变化时会被调用；
-  ///例如：在之前build()中包含了一个InheritedWidget，然后在之后的build()中InheritedWidget发生了变化，
-  ///那么此时InheritedWidget的子widget的didChangeDependencies()回调都会被调用。
-  ///典型的场景是当系统语言Locale或应用主题改变时，Flutter framework会通知widget调用此回调。
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    print('didChangeDependencies');
   }
 }
