@@ -132,6 +132,10 @@ class _CounterStatefulWidgetState extends State<CounterStatefulWidget> {
     print('reassemble');
   }
 
+  ///当State对象的依赖发生变化时会被调用；
+  ///例如：在之前build()中包含了一个InheritedWidget，然后在之后的build()中InheritedWidget发生了变化，
+  ///那么此时InheritedWidget的子widget的didChangeDependencies()回调都会被调用。
+  ///典型的场景是当系统语言Locale或应用主题改变时，Flutter framework会通知widget调用此回调。
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
