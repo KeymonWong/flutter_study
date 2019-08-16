@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; //安卓默认视觉效果
+// import 'package:flutter/cupertino.dart'; //iOS默认视觉效果
 
 import 'login.dart';
+import 'WidgetBreif.dart';
 
 Route<dynamic> _onRouter(RouteSettings settings) {
   String routeName = settings.name;
@@ -48,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/FirstPage': (BuildContext ctx) => FirstPage(),
         '/SecondPage': (BuildContext ctx) =>
             SecondPage(text: ModalRoute.of(context).settings.arguments),
+        '/WidgetBreif': (context) => WidgetBreif(),
       },
       //注意onGenerateRoute只会对命名路由生效
       //它在打开命名路由时可能会被调用，之所以说可能，是因为当调用Navigator.pushNamed(...)打开命名路由时，
@@ -152,6 +155,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("打开登录页面"),
               textColor: Colors.red,
               onPressed: () => Navigator.pushNamed(context, '/login'),
+            ),
+            FlatButton.icon(
+              label: Text('Echo'),
+              icon: Icon(Icons.arrow_drop_down_circle),
+              textColor: Colors.blue,
+              onPressed: () => Navigator.pushNamed(context, '/WidgetBreif'),
             ),
           ],
         ),
