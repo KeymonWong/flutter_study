@@ -31,10 +31,7 @@ class WidgetStateManager extends StatelessWidget {
             Text('Widget管理自身状态,点击下面'),
             BoxA(),
             Text('\n'),
-            Text(
-              
-              '父Widget管理子Widget的状态,点击下面'
-            ),
+            Text('父Widget管理子Widget的状态,点击下面'),
             ParentWidget(),
           ],
         ),
