@@ -165,8 +165,9 @@ class _MyHomePageState extends State<MyHomePage> {
               textColor: Colors.blue,
               onPressed: () => Navigator.pushNamed(context, '/WidgetBreif'),
             ),
-            FlatButton(
-              child: Text('widget状态管理'),
+            FlatButton.icon(
+              icon: Icon(Icons.thumb_up),
+              label: Text('widget状态管理'),
               textColor: Colors.yellow[900],
               hoverColor: Colors.yellow[800],
               onPressed: () => Navigator.pushNamed(context, '/WidgetStateManager'),
